@@ -1,20 +1,25 @@
 package go.faddy.hmrsystem;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.navigation.NavigationView;
+
+import go.faddy.hmrsystem.ui.gallery.GalleryFragment;
+import go.faddy.hmrsystem.ui.popup.DeletePopUp;
+import go.faddy.hmrsystem.ui.popup.InsertPopUp;
+import go.faddy.hmrsystem.ui.popup.UpdatePopUp;
 
 public class ShowingItems extends AppCompatActivity {
 
@@ -28,8 +33,7 @@ public class ShowingItems extends AppCompatActivity {
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setDrawerLayout(drawer)
@@ -41,7 +45,7 @@ public class ShowingItems extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.showing_items, menu);
         return true;
     }
@@ -51,5 +55,24 @@ public class ShowingItems extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_insert) {
+            startActivity(new Intent(getApplicationContext(), InsertPopUp.class));
+            onResumeFragments();
+            return true;
+        } else if (item.getItemId() == R.id.action_update) {
+            startActivity(new Intent(getApplicationContext(), UpdatePopUp.class));
+            onResumeFragments();
+            return true;
+        } else if (item.getItemId() == R.id.action_delete) {
+            startActivity(new Intent(getApplicationContext(), DeletePopUp.class));
+            onResumeFragments();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

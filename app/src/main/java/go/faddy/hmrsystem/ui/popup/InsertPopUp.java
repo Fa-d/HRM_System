@@ -12,7 +12,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
-import go.faddy.hmrsystem.api.responses.UserFetchResponseModel;
+import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,26 +31,26 @@ public class InsertPopUp extends AppCompatActivity {
         params.y = -params.width / 2;
         this.getWindow().setAttributes(params);
         initilizeIDs();
-        insertbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getTexts();
-                RetrofitClient.getInstance().getApi().insertNewUser(usernameString, phoneString, addressString).enqueue(new Callback<UserFetchResponseModel>() {
-                    @Override
-                    public void onResponse(Call<UserFetchResponseModel> call, Response<UserFetchResponseModel> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(InsertPopUp.this, "Done", Toast.LENGTH_SHORT).show();
-                        }else{
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserFetchResponseModel> call, Throwable t) {
-                    }
-                });
-                finish();
-            }
-        });
+//        insertbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getTexts();
+//                RetrofitClient.getInstance().getApi().getSupplierListJSON(usernameString, phoneString, addressString).enqueue(new Callback<SupplierFetchResponseModel>() {
+//                    @Override
+//                    public void onResponse(Call<SupplierFetchResponseModel> call, Response<SupplierFetchResponseModel> response) {
+//                        if(response.isSuccessful()){
+//                            Toast.makeText(InsertPopUp.this, "Done", Toast.LENGTH_SHORT).show();
+//                        }else{
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<SupplierFetchResponseModel> call, Throwable t) {
+//                    }
+//                });
+//                finish();
+//            }
+//        });
 
 
     }

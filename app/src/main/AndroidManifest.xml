@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HMRSystem"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.SearchUI"></activity>
         <activity
             android:name=".ui.popup.DeletePopUp"
             android:excludeFromRecents="true"

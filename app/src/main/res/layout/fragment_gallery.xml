@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.gallery.GalleryFragment">
 
-    <TableLayout
-        android:id="@+id/table"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </TableLayout>
-</LinearLayout>
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:id="@+id/simpleSearchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:outlineSpotShadowColor="@color/purple_200" />-->
+            <ImageButton
+                android:id="@+id/frame_expand_minimize"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_baseline_search_24"
+                android:background="@null"
+                android:layout_height="match_parent"/>
+            <FrameLayout
+                android:id="@+id/inputs_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+            </TableLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</HorizontalScrollView>

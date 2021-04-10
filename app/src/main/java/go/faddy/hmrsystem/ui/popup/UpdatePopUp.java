@@ -5,14 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
-import go.faddy.hmrsystem.api.responses.UserFetchResponseModel;
+import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,14 +36,14 @@ public class UpdatePopUp extends AppCompatActivity {
             public void onClick(View view) {
                 getTexts();
                 RetrofitClient.getInstance().getApi().updateUser(idString, usernameString, phoneString, addressString)
-                        .enqueue(new Callback<UserFetchResponseModel>() {
+                        .enqueue(new Callback<SupplierFetchResponseModel>() {
                             @Override
-                            public void onResponse(Call<UserFetchResponseModel> call, Response<UserFetchResponseModel> response) {
+                            public void onResponse(Call<SupplierFetchResponseModel> call, Response<SupplierFetchResponseModel> response) {
 //                                Toast.makeText(UpdatePopUp.this, "Success", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onFailure(Call<UserFetchResponseModel> call, Throwable t) {
+                            public void onFailure(Call<SupplierFetchResponseModel> call, Throwable t) {
 //                                Toast.makeText(UpdatePopUp.this, "failure", Toast.LENGTH_SHORT).show();
                             }
                         });

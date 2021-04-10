@@ -10,7 +10,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
-import go.faddy.hmrsystem.api.responses.UserFetchResponseModel;
+import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
 import go.faddy.hmrsystem.ui.gallery.GalleryFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,22 +30,22 @@ public class DeletePopUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getTexts();
-                RetrofitClient.getInstance().getApi().deleteUser(idString)
-                        .enqueue(
-                                new Callback<UserFetchResponseModel>() {
-                                    @Override
-                                    public void onResponse(Call<UserFetchResponseModel> call, Response<UserFetchResponseModel> response) {
-
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<UserFetchResponseModel> call, Throwable t) {
-
-                                    }
-                                }
-                        );
-
-                finish();
+//                RetrofitClient.getInstance().getApi().SearchItem(idString)
+//                        .enqueue(
+//                                new Callback<SupplierFetchResponseModel>() {
+//                                    @Override
+//                                    public void onResponse(Call<SupplierFetchResponseModel> call, Response<SupplierFetchResponseModel> response) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Call<SupplierFetchResponseModel> call, Throwable t) {
+//
+//                                    }
+//                                }
+//                        );
+//
+//                finish();
             }
 
         });

@@ -1,22 +1,40 @@
 package go.faddy.hmrsystem.ui.gallery;
 
+import android.app.DatePickerDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
-import go.faddy.hmrsystem.api.responses.UserFetchResponseModel;
+import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,56 +42,381 @@ import retrofit2.Response;
 public class GalleryFragment extends Fragment {
 
     private GalleryViewModel galleryViewModel;
+    private ImageButton imageButton;
+
+    SearchView searchView;
+    private FrameLayout frameLayout;
+    int leftMargin = 10;
+    int topMargin = 2;
+    int rightMargin = 10;
+    int bottomMargin = 2;
+
+    boolean frameExpand = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
+        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TableLayout tableLayout = root.findViewById(R.id.table);
 
-        RetrofitClient.getInstance().getApi().getCarModels().enqueue(
-                new Callback<List<UserFetchResponseModel>>() {
+        marginRow(tableLayout);
+        frameLayout = root.findViewById(R.id.inputs_gallery);
+//        searchView = root.findViewById(R.id.simpleSearchView);
+        imageButton = root.findViewById(R.id.frame_expand_minimize);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(frameExpand){
+                    frameLayout.setVisibility(View.GONE);
+                    imageButton.setImageResource(R.drawable.ic_baseline_search_24);
+                    frameExpand = false;
+                    mainTable(tableLayout);
+                }
+                else{
+                    tableLayout.removeAllViews();
+                    marginRow(tableLayout);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    serachButtons(frameLayout, tableLayout);
+                    imageButton.setImageResource(R.drawable.ic_baseline_close_24);
+                    frameExpand = true;
+                }
+
+            }
+        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                tableLayout.removeAllViews();
+//                marginRow(tableLayout);
+//                mainTable(tableLayout);
+//                return false;
+//            }
+//        });
+//        searchView.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                tableLayout.removeAllViews();
+//                marginRow(tableLayout);
+//            }
+//        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                queryView(tableLayout, newText);
+//                tableLayout.removeAllViews();
+//                marginRow(tableLayout);
+//                return false;
+//            }
+//        });
+
+        mainTable(tableLayout);
+
+        return root;
+    }
+
+    void serachButtons(FrameLayout frameLayout, TableLayout tableLayout){
+        LinearLayout linearLayoutVertical1 = new LinearLayout(getContext());
+        linearLayoutVertical1.setOrientation(LinearLayout.VERTICAL);
+
+        EditText supCode = new EditText(getContext());
+        supCode.setHint("Enter Supplier Code");
+
+        EditText supName = new EditText(getContext());
+        supName.setHint("Enter Supplier Name");
+
+
+        linearLayoutVertical1.addView(supCode);
+        linearLayoutVertical1.addView(supName);
+
+
+
+        LinearLayout linearLayoutVertical2 = new LinearLayout(getContext());
+        linearLayoutVertical2.setOrientation(LinearLayout.VERTICAL);
+
+
+        DatePickerDialog datePicker1 = new DatePickerDialog(getContext());
+        DatePickerDialog datePicker2 = new DatePickerDialog(getContext());
+
+        Button fromButton = new Button(getContext());
+        fromButton.setText("Search");
+        fromButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RetrofitClient.getInstance().getApi().SearchItem(supCode.getText().toString(),
+                        supName.getText().toString())
+                        .enqueue(new Callback<List<SupplierFetchResponseModel>>() {
                     @Override
-                    public void onResponse(Call<List<UserFetchResponseModel>> call, Response<List<UserFetchResponseModel>> response) {
+                    public void onResponse(Call<List<SupplierFetchResponseModel>> call, Response<List<SupplierFetchResponseModel>> response) {
+//                        if(response.isSuccessful()){
+                            int x = response.body().size();
+                            if(x > 0){
+                                for (int i = 0; i < x; i++) {
+
+                                    final TableRow tableRow = new TableRow(getActivity());
+                                    TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
+                                            TableLayout.LayoutParams.WRAP_CONTENT);
+                                    tableRowParams.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+                                    tableRow.setLayoutParams(tableRowParams);
+
+                                    final TextView supcode = initPlainTextView(i);
+                                    final TextView supname = initPlainTextView(i);
+                                    final TextView invnum = initPlainTextView(i);
+                                    final TextView invdate = initPlainTextView(i);
+                                    final TextView debit = initPlainTextView(i);
+                                    final TextView credit = initPlainTextView(i);
+
+                                    supcode.setText(boldingText(String.valueOf(response.body().get(i).getSupcode()) + "\t\t"));
+                                    supname.setText(boldingText(response.body().get(i).getSupname() + "\t\t"));
+                                    invnum.setText(boldingText(response.body().get(i).getInvnum() + "\t\t"));
+                                    invdate.setText(boldingText(String.valueOf(response.body().get(i).getInvdate() + "\t\t")));
+                                    debit.setText(boldingText(response.body().get(i).getDebit() + "\t\t"));
+                                    credit.setText(boldingText(String.valueOf(response.body().get(i).getCredit() + "\t\t")));
+
+                                    supcode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                                    supname.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                                    invnum.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+                                    invdate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+                                    tableRow.addView(supcode);
+                                    tableRow.addView(supname);
+                                    tableRow.addView(invnum);
+                                    tableRow.addView(invdate);
+                                    tableRow.addView(debit);
+                                    tableRow.addView(credit);
+
+                                    tableLayout.addView(tableRow);
+                                }
+//                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<SupplierFetchResponseModel>> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+//        Button toButton = new Button(getContext());
+//        toButton.setText("Select Ending Date");
+//
+//        final Calendar fromCalendar = Calendar.getInstance();
+//        final Calendar toCalendar = Calendar.getInstance();
+//        fromButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                datePicker1.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                                          int dayOfMonth) {
+//
+//                        fromCalendar.set(Calendar.YEAR, year);
+//                        fromCalendar.set(Calendar.MONTH, monthOfYear);
+//                        fromCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//
+//                        fromButton.setText(updateLabel(fromCalendar));
+//                    }
+//                });
+//            }
+//        });
+
+        linearLayoutVertical2.addView(fromButton);
+//        linearLayoutVertical2.addView(toButton);
+
+        LinearLayout linearLayoutHoriztonal = new LinearLayout(getContext());
+//        linearLayoutHoriztonal.setOrientation(LinearLayout.HORIZONTAL);
+
+        linearLayoutHoriztonal.addView(linearLayoutVertical1);
+
+        linearLayoutHoriztonal.addView(linearLayoutVertical2);
+
+        frameLayout.addView(linearLayoutHoriztonal);
+
+    }
+
+    private String updateLabel(Calendar myCalendar) {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        return sdf.format(myCalendar.getTime());
+    }
+//    void queryView(TableLayout tableLayout, String text){
+//        RetrofitClient.getInstance().getApi().SearchItem(text)
+//                .enqueue(new Callback<List<SupplierFetchResponseModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<SupplierFetchResponseModel>> call, Response<List<SupplierFetchResponseModel>> response) {
+//                        if(response.isSuccessful()){
+//                            int x = response.body().size();
+//                           if(x > 0){
+//                               for (int i = 0; i < x; i++) {
+//
+//                                   final TableRow tableRow = new TableRow(getActivity());
+//                                   TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+//                                   tableRowParams.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+//                                   tableRow.setLayoutParams(tableRowParams);
+//
+//                                   final TextView supcode = initPlainTextView(i);
+//                                   final TextView supname = initPlainTextView(i);
+//                                   final TextView invnum = initPlainTextView(i);
+//                                   final TextView invdate = initPlainTextView(i);
+//                                   final TextView debit = initPlainTextView(i);
+//                                   final TextView credit = initPlainTextView(i);
+//
+//                                   supcode.setText(boldingText(String.valueOf(response.body().get(i).getSupcode()) + "\t\t"));
+//                                   supname.setText(boldingText(response.body().get(i).getSupname() + "\t\t"));
+//                                   invnum.setText(boldingText(response.body().get(i).getInvnum() + "\t\t"));
+//                                   invdate.setText(boldingText(String.valueOf(response.body().get(i).getInvdate() + "\t\t")));
+//                                   debit.setText(boldingText(response.body().get(i).getDebit() + "\t\t"));
+//                                   credit.setText(boldingText(String.valueOf(response.body().get(i).getCredit() + "\t\t")));
+//
+//                                   supcode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+//                                   supname.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+//                                   invnum.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+//
+//                                   invdate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+//
+//                                   tableRow.addView(supcode);
+//                                   tableRow.addView(supname);
+//                                   tableRow.addView(invnum);
+//                                   tableRow.addView(invdate);
+//                                   tableRow.addView(debit);
+//                                   tableRow.addView(credit);
+//
+//                                   tableLayout.addView(tableRow);
+//                               }
+//                           }
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<SupplierFetchResponseModel>> call, Throwable t) {
+//
+//                    }
+//                });
+//    }
+
+    void marginRow(TableLayout tableLayout){
+        final TableRow tableRow1 = new TableRow(getActivity());
+        TableLayout.LayoutParams tableRowParams1 = new TableLayout
+                .LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        tableRowParams1.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+        tableRow1.setLayoutParams(tableRowParams1);
+//
+        final TextView supcode1 = initPlainTextViewTitle();
+        final TextView supname1 = initPlainTextViewTitle();
+        final TextView invnum1 = initPlainTextViewTitle();
+        final TextView invdate1 = initPlainTextViewTitle();
+        final TextView debit1 = initPlainTextViewTitle();
+        final TextView credit1 = initPlainTextViewTitle();
+
+        supcode1.setText(boldingText("supcode" + "\t\t"));
+        supname1.setText(boldingText("supname" + "\t\t"));
+        invnum1.setText(boldingText("invnum" + "\t\t"));
+        invdate1.setText(boldingText("invdate" + "\t\t"));
+        debit1.setText(boldingText("debit" + "\t\t"));
+        credit1.setText(boldingText("credit" + "\t\t"));
+
+        tableRow1.addView(supcode1);
+        tableRow1.addView(supname1);
+        tableRow1.addView(invnum1);
+        tableRow1.addView(invdate1);
+        tableRow1.addView(debit1);
+        tableRow1.addView(credit1);
+
+        tableLayout.addView(tableRow1);
+
+    }
+
+    void mainTable(TableLayout tableLayout) {
+
+        RetrofitClient.getInstance().getApi().getSupplierListJSON()
+                .enqueue(new Callback<List<SupplierFetchResponseModel>>() {
+                    @Override
+                    public void onResponse(Call<List<SupplierFetchResponseModel>> call, Response<List<SupplierFetchResponseModel>> response) {
                         int x = response.body().size();
                         for (int i = 0; i < x; i++) {
+
                             final TableRow tableRow = new TableRow(getActivity());
-                            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                            TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                            tableRowParams.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+                            tableRow.setLayoutParams(tableRowParams);
 
-                            final TextView Id = new TextView(getActivity());
-                            final TextView name = new TextView(getActivity());
-                            final TextView phone = new TextView(getActivity());
-                            final TextView address = new TextView(getActivity());
+                            final TextView supcode = initPlainTextView(i);
+                            final TextView supname = initPlainTextView(i);
+                            final TextView invnum = initPlainTextView(i);
+                            final TextView invdate = initPlainTextView(i);
+                            final TextView debit = initPlainTextView(i);
+                            final TextView credit = initPlainTextView(i);
 
-                            Id.setText(String.valueOf(response.body().get(i).getId() )+ "\t\t");
-                            name.setText(response.body().get(i).getName()+ "\t\t");
-                            phone.setText(response.body().get(i).getPhone()+ "\t\t");
-                            address.setText(String.valueOf(response.body().get(i).getAddress()+ "\t\t") );
+                            supcode.setText(boldingText(String.valueOf(response.body().get(i).getSupcode()) + "\t\t"));
+                            supname.setText(boldingText(response.body().get(i).getSupname() + "\t\t"));
+                            invnum.setText(boldingText(response.body().get(i).getInvnum() + "\t\t"));
+                            invdate.setText(boldingText(String.valueOf(response.body().get(i).getInvdate() + "\t\t")));
+                            debit.setText(boldingText(response.body().get(i).getDebit() + "\t\t"));
+                            credit.setText(boldingText(String.valueOf(response.body().get(i).getCredit() + "\t\t")));
 
-                            Id.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                            name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                            phone.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                            address.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                            supcode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                            supname.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                            invnum.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-                            tableRow.addView(Id);
-                            tableRow.addView(name);
-                            tableRow.addView(phone);
-                            tableRow.addView(address);
+                            invdate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+                            tableRow.addView(supcode);
+                            tableRow.addView(supname);
+                            tableRow.addView(invnum);
+                            tableRow.addView(invdate);
+                            tableRow.addView(debit);
+                            tableRow.addView(credit);
 
                             tableLayout.addView(tableRow);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<UserFetchResponseModel>> call, Throwable t) {
+                    public void onFailure(Call<List<SupplierFetchResponseModel>> call, Throwable t) {
 
                     }
-                }
-        );
-        return root;
+                });
+    }
+
+
+    private SpannableString boldingText(String s) {
+        SpannableString spanString = new SpannableString(s);
+        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+        return spanString;
+    }
+
+    private TextView initPlainTextView(int i) {
+        TextView textView = new TextView(getContext());
+        textView.setPadding(15, 15, 15, 15);
+        if (i % 2 == 0) {
+            textView.setBackgroundResource(R.drawable.cell_shape_odd);
+        } else {
+            textView.setBackgroundResource(R.drawable.cell_shape_even);
+        }
+        textView.setGravity(Gravity.CENTER);
+        return textView;
+    }
+
+    private TextView initPlainTextViewTitle() {
+        TextView textView = new TextView(getContext());
+        textView.setPadding(15, 15, 15, 15);
+
+        textView.setBackgroundResource(R.drawable.cell_shape_title);
+
+        textView.setGravity(Gravity.CENTER);
+        return textView;
     }
 
 }

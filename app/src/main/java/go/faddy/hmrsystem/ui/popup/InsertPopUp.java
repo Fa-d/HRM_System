@@ -1,14 +1,15 @@
 package go.faddy.hmrsystem.ui.popup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.List;
 
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
@@ -18,9 +19,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InsertPopUp extends AppCompatActivity {
-    TextInputEditText username, phone, address;
-    MaterialButton insertbtn;
-    String usernameString, phoneString, addressString;
+    private TextInputEditText supcode, supname, invnum, debit, credit, invdate, doctype;
+    private MaterialButton pushBtn;
+    private String supcodeString, supNameString, invnumString, invDateString, doctypeString, debitString, creditString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,41 +33,50 @@ public class InsertPopUp extends AppCompatActivity {
         params.y = -params.width / 2;
         this.getWindow().setAttributes(params);
         initilizeIDs();
-//        insertbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getTexts();
-//                RetrofitClient.getInstance().getApi().getSupplierListJSON(usernameString, phoneString, addressString).enqueue(new Callback<SupplierFetchResponseModel>() {
-//                    @Override
-//                    public void onResponse(Call<SupplierFetchResponseModel> call, Response<SupplierFetchResponseModel> response) {
-//                        if(response.isSuccessful()){
-//                            Toast.makeText(InsertPopUp.this, "Done", Toast.LENGTH_SHORT).show();
-//                        }else{
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<SupplierFetchResponseModel> call, Throwable t) {
-//                    }
-//                });
-//                finish();
-//            }
-//        });
+        pushBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getTexts();
+                RetrofitClient.getInstance().getApi().insertIntoSupplierBal(
+                        supcodeString, supNameString, invnumString, doctypeString, invDateString,
+                        Integer.valueOf(debitString), Integer.valueOf(creditString)
+                ).enqueue(new Callback<List<SupplierFetchResponseModel>>() {
+                    @Override
+                    public void onResponse(Call<List<SupplierFetchResponseModel>> call,
+                                           Response<List<SupplierFetchResponseModel>> response) {
+                        finish();
+                    }
 
+                    @Override
+                    public void onFailure(Call<List<SupplierFetchResponseModel>> call, Throwable t) {
 
+                    }
+
+                });
+                finish();
+            }
+        });
     }
 
-    private void getTexts(){
-        usernameString = username.getText().toString().trim();
-        phoneString = phone.getText().toString();
-        addressString = address.getText().toString();
+    private void getTexts() {
+        supcodeString = supcode.getText().toString().trim();
+        supNameString = supname.getText().toString().trim();
+        invnumString = invnum.getText().toString().trim();
+        invDateString = invdate.getText().toString().trim();
+        debitString = debit.getText().toString().trim();
+        creditString = credit.getText().toString().trim();
+        doctypeString = doctype.getText().toString().trim();
     }
 
     private void initilizeIDs() {
-        username = findViewById(R.id.carname_popup_insert);
-        phone = findViewById(R.id.owner_name_popup_insert);
-        address = findViewById(R.id.model_popup_insert);
-        insertbtn = findViewById(R.id.btn_popup_insert);
+        supcode = findViewById(R.id.supplier_code_insert_popup);
+        supname = findViewById(R.id.supname_popup_insert);
+        invnum = findViewById(R.id.invnum_popup_insert);
+        invdate = findViewById(R.id.invdate_popup_insert);
+        debit = findViewById(R.id.debit_popup_insert);
+        credit = findViewById(R.id.credit_popup_insert);
+        pushBtn = findViewById(R.id.btn_popup_insert);
+        doctype = findViewById(R.id.doctype_popup_insert);
     }
 }
 

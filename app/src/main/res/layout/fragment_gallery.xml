@@ -13,17 +13,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-<!--            <androidx.appcompat.widget.SearchView-->
-<!--                android:id="@+id/simpleSearchView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:outlineSpotShadowColor="@color/purple_200" />-->
-            <ImageButton
-                android:id="@+id/frame_expand_minimize"
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/simpleSearchView"
                 android:layout_width="match_parent"
-                android:src="@drawable/ic_baseline_search_24"
-                android:background="@null"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:outlineSpotShadowColor="@color/purple_200" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/frame_expand_minimize"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:src="@drawable/ic_baseline_search_24"-->
+<!--                android:background="@null"-->
+<!--                android:layout_height="match_parent"/>-->
             <FrameLayout
                 android:id="@+id/inputs_gallery"
                 android:layout_width="match_parent"

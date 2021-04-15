@@ -13,14 +13,7 @@ public interface Api {
 
 
     @GET("suppliers")
-    Call<List<SupplierFetchResponseModel>> getSupplierListJSON(
-//            @Field("supcode") int supcode,
-//            @Field("supname") String supname,
-//            @Field("invnum") int invnum,
-//            @Field("invdate") String invdate,
-//            @Field("debit") int debit,
-//            @Field("credit") int credit
-    );
+    Call<List<SupplierFetchResponseModel>> getSupplierListJSON();
 
     @FormUrlEncoded
     @POST("update")
@@ -35,11 +28,30 @@ public interface Api {
     @FormUrlEncoded
     @POST("supplierspost")
     Call<List<SupplierFetchResponseModel>> SearchItem(
-            @Field("sCode") String sCode,
-            @Field("sName") String sName
+            @Field("sCode") String sCode
+//            @Field("sName") String sName
     );
 
+    @FormUrlEncoded
+    @POST("updatedebit")
+    Call<List<SupplierFetchResponseModel>> UpdateDebitCredit(
+            @Field("supcode") String supcode,
+            @Field("supname") String supname,
+            @Field("invnum") String invnum,
+            @Field("debit") int debit,
+            @Field("credit") int credit
+    );
 
-
+    @FormUrlEncoded
+    @POST("suppliersinsert")
+    Call<List<SupplierFetchResponseModel>> insertIntoSupplierBal(
+            @Field("sCode") String supcode,
+            @Field("sName") String supname,
+            @Field("invNum") String invnum,
+            @Field("docType") String doctype,
+            @Field("date") String invdate,
+            @Field("debit") int debit,
+            @Field("credit") int credit
+    );
 
 }

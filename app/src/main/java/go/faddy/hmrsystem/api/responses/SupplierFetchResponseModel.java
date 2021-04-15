@@ -1,15 +1,15 @@
 package go.faddy.hmrsystem.api.responses;
 
 public class SupplierFetchResponseModel {
-    private String supname, invnum, invdate;
+    private String supname, invnum, invdate, doctype;
     private int debit, credit, supcode;
 
-    public SupplierFetchResponseModel(String supname, String invnum,
-                                      String invdate, int debit,
-                                      int credit, int supcode) {
+    public SupplierFetchResponseModel(String supname, String invnum, String invdate,
+                                      String doctype, int debit, int credit, int supcode) {
         this.supname = supname;
         this.invnum = invnum;
         this.invdate = invdate;
+        this.doctype = doctype;
         this.debit = debit;
         this.credit = credit;
         this.supcode = supcode;
@@ -37,6 +37,14 @@ public class SupplierFetchResponseModel {
 
     public void setInvdate(String invdate) {
         this.invdate = invdate;
+    }
+
+    public String getDoctype() {
+        return doctype;
+    }
+
+    public void setDoctype(String doctype) {
+        this.doctype = doctype;
     }
 
     public int getDebit() {

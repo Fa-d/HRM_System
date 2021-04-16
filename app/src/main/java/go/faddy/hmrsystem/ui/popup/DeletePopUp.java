@@ -8,6 +8,8 @@ import android.view.View;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.List;
+
 import go.faddy.hmrsystem.R;
 import go.faddy.hmrsystem.api.RetrofitClient;
 import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
@@ -30,22 +32,22 @@ public class DeletePopUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getTexts();
-//                RetrofitClient.getInstance().getApi().SearchItem(idString)
-//                        .enqueue(
-//                                new Callback<SupplierFetchResponseModel>() {
-//                                    @Override
-//                                    public void onResponse(Call<SupplierFetchResponseModel> call, Response<SupplierFetchResponseModel> response) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(Call<SupplierFetchResponseModel> call, Throwable t) {
-//
-//                                    }
-//                                }
-//                        );
-//
-//                finish();
+                RetrofitClient.getInstance().getApi().deletePost( idString)
+                        .enqueue(
+                                new Callback<List<SupplierFetchResponseModel>>() {
+                                    @Override
+                                    public void onResponse(Call<List<SupplierFetchResponseModel>> call, Response<List<SupplierFetchResponseModel>> response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<SupplierFetchResponseModel>> call, Throwable t) {
+
+                                    }
+                                }
+                        );
+
+                finish();
             }
 
         });

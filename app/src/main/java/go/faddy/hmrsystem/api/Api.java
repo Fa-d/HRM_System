@@ -4,10 +4,14 @@ import java.util.List;
 
 import go.faddy.hmrsystem.api.responses.SupplierFetchResponseModel;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface Api {
 
@@ -25,11 +29,17 @@ public interface Api {
     );
 
 
-    @FormUrlEncoded
-    @POST("supplierspost")
+    @GET("suppliers/{id}")
     Call<List<SupplierFetchResponseModel>> SearchItem(
-            @Field("sCode") String sCode
+            @Path("id") String sCode
 //            @Field("sName") String sName
+    );
+
+
+    @DELETE("suppliers/{id}")
+    Call<List<SupplierFetchResponseModel>> deletePost(
+//            @Field("id") String sCode,
+            @Path("id") String sCode1
     );
 
     @FormUrlEncoded
@@ -43,7 +53,7 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("suppliersinsert")
+    @POST("suppliers")
     Call<List<SupplierFetchResponseModel>> insertIntoSupplierBal(
             @Field("sCode") String supcode,
             @Field("sName") String supname,

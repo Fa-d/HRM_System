@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class  RetrofitClient {
 
     private static final String BASE_URL = "http://192.168.31.232:8090/api/";
     private static go.faddy.hmrsystem.api.RetrofitClient mInstance;

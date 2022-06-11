@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="go.faddy.hmrsystem">
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name="go.faddy.hmrsystem.MainApplication"
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HMRSystem"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.HMR_sys"
+        tools:targetApi="31">
         <activity
-            android:name=".ui.popup.DebitPopUp"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
-        <activity android:name=".ui.SearchUI" />
+            android:name="go.faddy.hmrsystem.ui.dashboard.DashBoardActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.popup.DeletePopUp"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
-        <activity
-            android:name=".ui.popup.UpdatePopUp"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
-        <activity
-            android:name=".ui.popup.InsertPopUp"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_login">
+            android:name="go.faddy.hmrsystem.ui.login.FirstActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivity" />
-        <activity
-            android:name=".ShowingItems"
-            android:label="@string/title_activity_showing_items"
-            android:theme="@style/Theme.HMRSystem.NoActionBar" />
     </application>
 
 </manifest>

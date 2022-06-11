@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import go.faddy.hmrsystem.R;
 
+
 public class TestFragmentSearch extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

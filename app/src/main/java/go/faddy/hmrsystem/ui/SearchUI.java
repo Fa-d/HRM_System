@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import go.faddy.hmrsystem.R;
 
+
 public class SearchUI extends AppCompatActivity {
 
     @Override

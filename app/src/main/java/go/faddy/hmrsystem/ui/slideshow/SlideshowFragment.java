@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import go.faddy.hmrsystem.R;
 
+
 public class SlideshowFragment extends Fragment {
 
     private SlideshowViewModel slideshowViewModel;

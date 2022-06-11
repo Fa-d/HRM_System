@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_nav"
+    app:startDestination="@id/primaryDashBoardFragment">
+
+    <fragment
+        android:id="@+id/primaryDashBoardFragment"
+        android:name="go.faddy.hmrsystem.ui.dashboard.PrimaryDashBoardFragment"
+        android:label="fragment_primary_dash_board"
+        tools:layout="@layout/fragment_primary_dash_board">
+        <action
+            android:id="@+id/action_primaryDashBoardFragment_to_showDataFacadeFragment"
+            app:destination="@id/showDataFacadeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showDataFacadeFragment"
+        android:name="go.faddy.hmrsystem.ui.dashboard.ShowDataFacadeFragment"
+        android:label="fragment_show_data_facade"
+        tools:layout="@layout/fragment_show_data_facade" />
+</navigation>

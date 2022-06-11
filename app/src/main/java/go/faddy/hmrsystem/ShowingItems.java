@@ -8,9 +8,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,7 +18,6 @@ import com.google.android.material.navigation.NavigationView;
 import go.faddy.hmrsystem.ui.popup.DeletePopUp;
 import go.faddy.hmrsystem.ui.popup.InsertPopUp;
 import go.faddy.hmrsystem.ui.popup.UpdatePopUp;
-import go.faddy.hmrsystem.ui.testfragment.TestFragmentSearch;
 
 public class ShowingItems extends AppCompatActivity {
 
